@@ -1,4 +1,4 @@
 # aws-es-connector
 A small HttpConnector to be used with aws elasticsearch service
 
-[![npm version](https://badge.fury.io/js/awsesconnector.svg)](https://badge.fury.io/js/awsesconnector)
+[![NPM](https://nodei.co/npm/awsesconnector.png)](https://npmjs.org/package/awsesconnector)
