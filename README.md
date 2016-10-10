@@ -6,7 +6,7 @@ A small HttpConnector to be used with aws elasticsearch service
 Usage
 ```
 var AwsHttpConnector = require("awsesconnector");
-
+var elasticsearch = require("elasticsearch")
 
 module.exports.elasticsearchPlaces = new elasticsearch.Client({
     "host": <host:port>,
