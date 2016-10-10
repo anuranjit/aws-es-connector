@@ -1,7 +1,7 @@
 # aws-es-connector
 A small HttpConnector to be used with aws elasticsearch service
 
-[![NPM](https://nodei.co/npm/awsesconnector.png)](https://npmjs.org/package/awsesconnector)
+[![NPM](https://nodei.co/npm/aws-es-connector.png)](https://npmjs.org/package/aws-es-connector)
 
 Usage
 ```
