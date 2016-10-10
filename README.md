@@ -20,5 +20,4 @@ module.exports.elasticsearchPlaces = new elasticsearch.Client({
     "legacy": config["TURN_ON_AWS"]
 });
 
-
 ```
