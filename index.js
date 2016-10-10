@@ -1,9 +1,10 @@
 /**
  * Created by anuranjit on 9/10/16.
  */
-"use strict"
+"use strict";
 
-var HttpConnector = require("elasticsearch/src/lib/http.js");
+var HttpConnector = require("elasticsearch/src/lib/connectors/http.js");
+var Host = require("elasticsearch/src/lib/host");
 var AWS = require("aws-sdk");
 let _ = require('elasticsearch/src/lib/utils');
 var zlib = require("zlib");
@@ -11,6 +12,7 @@ var underscore = require("underscore");
 
 class AWSHttpConnector extends HttpConnector {
     constructor(host, config) {
+        host = new Host(host);
         super(host, config);
         this.legacyES = config["legacy"];
         var awsESConfig = config["awsESConfig"];
@@ -27,11 +29,11 @@ class AWSHttpConnector extends HttpConnector {
         var awsRequest = new AWS.HttpRequest(this.endpoint);
         underscore.extend(awsRequest, reqParams);
         awsRequest.region = this.region;
-        var awsSigner = new AWS.Signers.V4(awsRequest, this.serviceName);
-        awsSigner.addAuthorization(this.credentials, new Date());
         awsRequest.body = params.body || {};
         awsRequest.headers['presigned-expires'] = false;
         awsRequest.headers['Host'] = this.endpoint.host;
+        var awsSigner = new AWS.Signers.V4(awsRequest, this.serviceName);
+        awsSigner.addAuthorization(this.credentials, new Date());
         return awsRequest;
     }
 
@@ -88,22 +90,22 @@ class AWSHttpConnector extends HttpConnector {
             request = AWSHttpConnector.getLegacyHandler(this.hand, reqParams, callBack)
         } else {
             var httpClient = new AWS.NodeHttpClient();
-            var httpRequest = this.getAwsHttpRequest(params, reqParams, callBack);
-            request = AWSHttpConnector.getAwsHandler(httpClient, httpRequest);
+            var httpRequest = this.getAwsHttpRequest(params, reqParams);
+            request = AWSHttpConnector.getAwsHandler(httpClient, httpRequest, callBack);
         }
         request.on('error', cleanUp);
-
         request.setNoDelay(true);
         request.setSocketKeepAlive(true);
+        if (this.legacyES) {
+            if (params.body) {
+                request.setHeader('Content-Length', Buffer.byteLength(params.body, 'utf8'));
+                request.end(params.body);
+            } else {
+                request.setHeader('Content-Length', 0);
+                request.end();
+            }
 
-        if (params.body) {
-            request.setHeader('Content-Length', Buffer.byteLength(params.body, 'utf8'));
-            request.end(params.body);
-        } else {
-            request.setHeader('Content-Length', 0);
-            request.end();
         }
-
         return function () {
             request.abort();
         };
@@ -117,3 +119,5 @@ class AWSHttpConnector extends HttpConnector {
         return httpClient.handleRequest(httpRequest, null, cb);
     }
 }
+
+module.exports = AWSHttpConnector;
