@@ -17,7 +17,7 @@ module.exports.elasticsearchPlaces = new elasticsearch.Client({
         "region": <aws region>,
         "serviceName":< service name ('es' in case of ElasticSearch Service)
     },
-    "legacy": config["TURN_ON_AWS"]
+    "legacy": <boolean:use aws or not>
 });
 
 ```
