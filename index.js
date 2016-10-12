@@ -116,7 +116,7 @@ class AWSHttpConnector extends HttpConnector {
     }
 
     static getAwsHandler(httpClient, httpRequest, cb) {
-        return httpClient.handleRequest(httpRequest, null, cb);
+        return httpClient.handleRequest(httpRequest, null, cb, cb);
     }
 }
 
