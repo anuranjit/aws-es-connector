@@ -17,7 +17,7 @@ module.exports.elasticsearchPlaces = new elasticsearch.Client({
         "region": <aws region>,
         "serviceName":< service name ('es' in case of ElasticSearch Service)
     },
-    "legacy": <boolean:use aws or not>
+    "legacy": <boolean:use aws or not> // This is inverted where true means don't use aws and vice versa
 });
 
 ```
