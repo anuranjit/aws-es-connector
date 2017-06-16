@@ -16,13 +16,16 @@ class AWSHttpConnector extends HttpConnector {
         super(host, config);
         this.legacyES = config["legacy"];
         var awsESConfig = config["awsESConfig"];
+        let useSSL = awsESConfig["useSSL"];
+        if (!useSSL) {
+            host = "http://" + host
+        }
         this.endpoint = new AWS.Endpoint(host.host);
         var accessKey = awsESConfig["accessKey"];
         var secretKey = awsESConfig["secretKey"];
         this.region = awsESConfig["region"];
         this.serviceName = awsESConfig["serviceName"];
         this.credentials = new AWS.Credentials(accessKey, secretKey)
-
     }
 
     getAwsHttpRequest(params, reqParams) {
